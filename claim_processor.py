@@ -1,11 +1,18 @@
 import os
+from dotenv import load_dotenv
 import pytesseract
 from PIL import Image
 from pdfminer.high_level import extract_text
 from openai import OpenAI
 
-# Set your OpenAI API key
-client = OpenAI(api_key="sk-Q7DAakb9nFm3Muwulm2OWqO0Kj8fLw0rjCzVbBy6NrT3BlbkFJgpYmePKSlHrNJTDNEE6iwnJudCO55T-Jnh95hB_fsA")
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the API key from environment
+api_key = os.getenv("OPENAI_API_KEY")
+
+# Set up the OpenAI client
+client = OpenAI(api_key=api_key)
 
 # --- Text Extraction ---
 def extract_text_from_pdf(file_path):
