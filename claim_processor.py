@@ -89,8 +89,6 @@ You are a healthcare insurance assistant. Based on the extracted claim data:
 
 Suggest what key documents or information are missing that could help strengthen the claim (e.g., prescription, diagnosis, billing codes, test results).
 
-Respond with a JSON list like:
-["Discharge Summary", "Prescription", "Lab Report"]
     """
     return gpt_call(prompt)
 
