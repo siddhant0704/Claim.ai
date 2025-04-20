@@ -6,10 +6,10 @@ layout = dbc.Container([
 
     html.P(
         "This web app helps you process insurance claims by extracting relevant information from various document types. Upload your claim documents and get a comprehensive report within seconds.",
-        className="text-center mb-5 text-muted", style={"fontSize": "1.1rem", "maxWidth": "800px", "margin": "0 auto"}
+        className="text-center mb-5 text-muted",
+        style={"fontSize": "1.1rem", "maxWidth": "800px", "margin": "0 auto"}
     ),
-    
-    # Upload Section
+
     dcc.Upload(
         id='upload-docs',
         children=html.Div([
@@ -33,16 +33,20 @@ layout = dbc.Container([
         accept=".pdf,.png,.jpg,.jpeg,.mp3,.wav,.m4a"
     ),
 
-    dbc.Button("🚀 Process Claim", id="submit-btn", color="primary", className="mx-auto d-block mb-4 py-2 px-4 font-weight-bold"),
+    # Buttons
+    dbc.Row([
+        dbc.Col(dbc.Button("🚀 Process Claim", id="submit-btn", color="primary", className="mb-2 w-100"), md=4),
+        dbc.Col(dbc.Button("🔄 Start From Beginning", id="reset-btn", color="danger", className="mb-2 w-100"), md=4),
+    ], justify="center", className="mb-4", style={"display": "none"}, id="action-buttons"),
 
-    # Loading spinner and file processing output
+    html.Div(id="file-preview", className="mb-4"),
+
+    # Output with spinner
     dcc.Loading(
         id="loading-output",
         type="circle",
         children=[
-            html.Div(id="file-list", className="mb-4"),
             dbc.Row([
-                # Cards for displaying processed output
                 dbc.Col(dbc.Card([
                     dbc.CardHeader("📋 Combined Info", className="bg-light text-dark font-weight-bold"),
                     dbc.CardBody(dcc.Textarea(id="output-info", style={"width": "100%", "height": "150px", "resize": "none", "border": "none", "fontSize": "1rem"}))
@@ -60,4 +64,5 @@ layout = dbc.Container([
             ])
         ]
     ),
+    dcc.Store(id="stored-docs", data=[]),  # Store uploaded files
 ], fluid=True)
