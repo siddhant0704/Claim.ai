@@ -1,6 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 
+
 # Layout for the Upload Docs Page (Processing Claims)
 upload_docs_page_layout = dbc.Container([
     html.H1("📝 Insurance Claim Processor", className="text-center my-5 text-dark font-weight-bold"),

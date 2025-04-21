@@ -1,8 +1,9 @@
+import dash
 from dash import Input, Output, State, callback, ctx, html
 import base64
 import os
 import tempfile
-from utils import process_claim_case  # Ensure this is imported
+from utils import process_claim_case 
 
 @callback(
     [
@@ -12,29 +13,50 @@ from utils import process_claim_case  # Ensure this is imported
         Output("output-summary", "value"),  # Display claim summary
         Output("output-missing", "value"),  # Display missing documents
         Output("action-buttons", "style"),  # Show/Hide action buttons
+        Output("dashboard-data", "data"),  # Populate dashboard table with parsed data
     ],
     [
         Input("upload-docs", "contents"),  # File upload input
         Input("submit-btn", "n_clicks"),  # Submit button
         Input("reset-btn", "n_clicks"),  # Reset button
+        Input("back-btn", "n_clicks"),  # Back button
     ],
     [
         State("upload-docs", "filename"),  # Get the uploaded file names
         State("upload-docs", "last_modified"),  # Get the last modified time of the files
         State("stored-docs", "data"),  # Get the stored data of previously uploaded files
     ],
+    prevent_initial_call=True
 )
-def upload_callback(contents, submit_clicks, reset_clicks, filenames, last_modified, stored_data):
+def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filenames, last_modified, stored_data):
     triggered_id = ctx.triggered_id
 
     # If reset button is clicked, clear everything
     if triggered_id == "reset-btn":
-        return None, [], "", "", "", {"display": "none"}
+        return None, [], "", "", "", {"display": "none"}, dash.no_update
+
+    # Handle back button logic
+    if triggered_id == "back-btn":
+        if stored_data:
+            # Populate the dashboard table with parsed data
+            table_rows = []
+            for file in stored_data:
+                name = file["name"]
+                parsed_data = file.get("parsed_data", {})
+                table_rows.append(html.Tr([
+                    html.Td(name),
+                    html.Td(parsed_data.get("summary", "N/A")),
+                    html.Td(parsed_data.get("status", "N/A")),
+                    html.Td("Actions Placeholder")
+                ]))
+            return stored_data, [], "", "", "", {"display": "none"}, table_rows
+
+        return stored_data, [], "", "", "", {"display": "none"}, []
 
     # Handle file upload logic
     elif triggered_id == "upload-docs":
         if contents is None:
-            return stored_data, [], "", "", "", {"display": "none"}
+            return stored_data, [], "", "", "", {"display": "none"}, dash.no_update
 
         file_previews = []
         updated_stored = []
@@ -58,12 +80,12 @@ def upload_callback(contents, submit_clicks, reset_clicks, filenames, last_modif
             file_previews.append(preview)
             updated_stored.append({"name": name, "content": encoded})
 
-        return updated_stored, file_previews, "", "", "", {"display": "flex"}
+        return updated_stored, file_previews, "", "", "", {"display": "flex"}, dash.no_update
 
     # Handle file submission and processing logic
     elif triggered_id == "submit-btn":
         if not stored_data:
-            return stored_data, [], "", "", "", {"display": "flex"}
+            return stored_data, [], "", "", "", {"display": "flex"}, dash.no_update
 
         previews = []
         info_outputs, summary_outputs, missing_outputs = [], [], []
@@ -90,6 +112,12 @@ def upload_callback(contents, submit_clicks, reset_clicks, filenames, last_modif
             summary_outputs.append(result.get("claim_summary", ""))
             missing_outputs.append(result.get("missing_documents", ""))
 
+            # Store parsed data for back button functionality
+            file["parsed_data"] = {
+                "summary": result.get("claim_summary", ""),
+                "status": "Processed"  # Example status
+            }
+
         # Return the processed results and updated UI components
         return (
             stored_data,
@@ -97,7 +125,8 @@ def upload_callback(contents, submit_clicks, reset_clicks, filenames, last_modif
             "\n".join(info_outputs),
             "\n".join(summary_outputs),
             "\n".join(missing_outputs),
-            {"display": "flex"}
+            {"display": "flex"},
+            dash.no_update
         )
 
-    return stored_data, [], "", "", "", {"display": "none"}
+    return stored_data, [], "", "", "", {"display": "none"}, dash.no_update
