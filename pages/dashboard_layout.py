@@ -23,8 +23,6 @@ landing_page_layout = dbc.Container([
         striped=True,
     ),
 
-    dcc.Store(id="dashboard-data", data=[]),  # This stores the dashboard data
-
     dbc.Row([
         dbc.Col(
             dbc.Button("Add Patient", id="add-patient-btn", color="primary", className="mb-4 w-100"),

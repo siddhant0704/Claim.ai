@@ -26,7 +26,7 @@ from utils import process_claim_case
         State("upload-docs", "last_modified"),  # Get the last modified time of the files
         State("stored-docs", "data"),  # Get the stored data of previously uploaded files
     ],
-    prevent_initial_call=True
+    prevent_initial_call=True,
 )
 def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filenames, last_modified, stored_data):
     triggered_id = ctx.triggered_id

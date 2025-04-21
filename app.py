@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, Output, Input, State
+from dash import Dash, html, dcc, Output, Input
 import dash_bootstrap_components as dbc
 
 # Import layouts
@@ -18,6 +18,7 @@ server = app.server  # for deployment (e.g. Heroku, Render)
 app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
     dcc.Store(id="navigation-store"),  # Store for navigation
+    dcc.Store(id="dashboard-data", data=[]),  # Global store for dashboard data
     html.Div(id="page-content"),
 
     # Hidden container to register all components referenced in callbacks
