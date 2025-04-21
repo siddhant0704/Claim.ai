@@ -6,8 +6,8 @@ from pages.dashboard_layout import landing_page_layout
 from pages.upload_docs_layout import upload_docs_page_layout
 
 # Import callbacks
-from callbacks.dashboard_callback import dashboard_callback
-from callbacks.upload_callback import upload_callback
+from callbacks.dashboard_callback import *
+from callbacks.upload_callback import *
 
 # Initialize the Dash app
 app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -17,7 +17,6 @@ server = app.server  # for deployment (e.g. Heroku, Render)
 # App layout with location and page content
 app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
-    dcc.Store(id="navigation-store"),  # Store for navigation
     dcc.Store(id="dashboard-data", data=[]),  # Global store for dashboard data
     html.Div(id="page-content"),
 
@@ -37,15 +36,6 @@ def display_page(pathname):
     if pathname == "/upload":
         return upload_docs_page_layout
     return landing_page_layout  # Default to dashboard
-
-# Navigation callback
-@app.callback(
-    Output("url", "pathname"),
-    Input("navigation-store", "data"),
-    prevent_initial_call=True
-)
-def navigate(data):
-    return data
 
 # Run the app
 if __name__ == "__main__":

@@ -25,10 +25,11 @@ from utils import process_claim_case
         State("upload-docs", "filename"),  # Get the uploaded file names
         State("upload-docs", "last_modified"),  # Get the last modified time of the files
         State("stored-docs", "data"),  # Get the stored data of previously uploaded files
+        State("dashboard-data", "data"),  # Get the current dashboard data
     ],
     prevent_initial_call=True,
 )
-def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filenames, last_modified, stored_data):
+def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filenames, last_modified, stored_data, dashboard_data):
     triggered_id = ctx.triggered_id
 
     # If reset button is clicked, clear everything
@@ -38,20 +39,23 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
     # Handle back button logic
     if triggered_id == "back-btn":
         if stored_data:
-            # Populate the dashboard table with parsed data
-            table_rows = []
+            # Add a new entry to the dashboard data
+            if not dashboard_data:
+                dashboard_data = []
+
             for file in stored_data:
                 name = file["name"]
                 parsed_data = file.get("parsed_data", {})
-                table_rows.append(html.Tr([
-                    html.Td(name),
-                    html.Td(parsed_data.get("summary", "N/A")),
-                    html.Td(parsed_data.get("status", "N/A")),
-                    html.Td("Actions Placeholder")
-                ]))
-            return stored_data, [], "", "", "", {"display": "none"}, table_rows
+                dashboard_data.append({
+                    "name": name,
+                    "summary": parsed_data.get("summary", "N/A"),
+                    "status": "Processed",
+                    "missing_docs": parsed_data.get("missing_documents", "N/A")
+                })
 
-        return stored_data, [], "", "", "", {"display": "none"}, []
+            return stored_data, [], "", "", "", {"display": "none"}, dashboard_data
+
+        return stored_data, [], "", "", "", {"display": "none"}, dashboard_data
 
     # Handle file upload logic
     elif triggered_id == "upload-docs":
@@ -115,7 +119,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
             # Store parsed data for back button functionality
             file["parsed_data"] = {
                 "summary": result.get("claim_summary", ""),
-                "status": "Processed"  # Example status
+                "missing_documents": result.get("missing_documents", "")
             }
 
         # Return the processed results and updated UI components
