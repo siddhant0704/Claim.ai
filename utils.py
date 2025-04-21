@@ -103,7 +103,7 @@ def process_claim_case(documents):
     for file_path, file_type in documents:
         if file_type == "pdf":
             text = extract_text_from_pdf(file_path)
-        elif file_type == "image":
+        elif file_type in ["image", "png", "jpg", "jpeg"]:  # Accept png as an image type
             text = extract_text_from_image(file_path)
         elif file_type == "audio":
             text = transcribe_audio(file_path)

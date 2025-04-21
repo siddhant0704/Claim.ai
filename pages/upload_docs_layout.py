@@ -1,7 +1,8 @@
-from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash import html, dcc
 
-layout = dbc.Container([
+# Layout for the Upload Docs Page (Processing Claims)
+upload_docs_page_layout = dbc.Container([
     html.H1("📝 Insurance Claim Processor", className="text-center my-5 text-dark font-weight-bold"),
 
     html.P(
@@ -10,6 +11,7 @@ layout = dbc.Container([
         style={"fontSize": "1.1rem", "maxWidth": "800px", "margin": "0 auto"}
     ),
 
+    # The same upload interface as in your original UI
     dcc.Upload(
         id='upload-docs',
         children=html.Div([
@@ -33,7 +35,7 @@ layout = dbc.Container([
         accept=".pdf,.png,.jpg,.jpeg,.mp3,.wav,.m4a"
     ),
 
-    # Buttons
+    # Buttons (Process and Reset)
     dbc.Row([
         dbc.Col(dbc.Button("🚀 Process Claim", id="submit-btn", color="primary", className="mb-2 w-100"), md=4),
         dbc.Col(dbc.Button("🔄 Start From Beginning", id="reset-btn", color="danger", className="mb-2 w-100"), md=4),
@@ -64,5 +66,13 @@ layout = dbc.Container([
             ])
         ]
     ),
-    dcc.Store(id="stored-docs", data=[]),  # Store uploaded files
+
+    # Store uploaded files
+    dcc.Store(id="stored-docs", data=[]),
+
+    # Back Button
+    dbc.Row([
+        dbc.Col(dbc.Button("🔙 Back to Claims", id="back-btn", color="secondary", className="w-100 mb-4", href="/"), md=4),
+    ], justify="center"),
+
 ], fluid=True)
