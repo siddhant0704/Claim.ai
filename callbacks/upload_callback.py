@@ -3,7 +3,10 @@ from dash import Input, Output, State, callback, ctx, html
 import base64
 import os
 import tempfile
-from utils import process_claim_case 
+from utils import process_claim_case
+from flask import session
+from app import db, ProcessedClaim
+from flask_dance.contrib.google import google
 
 @callback(
     [
@@ -121,6 +124,19 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                 "summary": result.get("claim_summary", ""),
                 "missing_documents": result.get("missing_documents", "")
             }
+
+            # Store the processed data in the database
+            if google.authorized:
+                user_info = google.get("/oauth2/v1/userinfo").json()
+                user_email = user_info["email"]
+                new_claim = ProcessedClaim(
+                    user_email=user_email,
+                    combined_info=result["combined_info"],
+                    claim_summary=result["claim_summary"],
+                    missing_documents="\n".join(result.get("missing_documents", []))
+                )
+                db.session.add(new_claim)
+                db.session.commit()
 
         # Return the processed results and updated UI components
         return (
