@@ -3,51 +3,57 @@ from dash import Input, Output, State, callback, ctx, html
 import base64
 import os
 import tempfile
+import re  # For extracting patient name
 from utils import process_claim_case
 
 @callback(
     [
-        Output("stored-docs", "data"),  # Stores uploaded files
-        Output("file-preview", "children"),  # Previews files
-        Output("output-info", "value"),  # Display extracted info
-        Output("output-summary", "value"),  # Display claim summary
-        Output("output-missing", "value"),  # Display missing documents
-        Output("action-buttons", "style"),  # Show/Hide action buttons
-        Output("dashboard-data", "data"),  # Populate dashboard table with parsed data
+        Output("stored-docs", "data"),
+        Output("file-preview", "children"),
+        Output("output-info", "value"),
+        Output("output-summary", "value"),
+        Output("output-missing", "value"),
+        Output("action-buttons", "style"),
+        Output("dashboard-data", "data"),
     ],
     [
-        Input("upload-docs", "contents"),  # File upload input
-        Input("submit-btn", "n_clicks"),  # Submit button
-        Input("reset-btn", "n_clicks"),  # Reset button
-        Input("back-btn", "n_clicks"),  # Back button
+        Input("upload-docs", "contents"),
+        Input("submit-btn", "n_clicks"),
+        Input("reset-btn", "n_clicks"),
+        Input("back-btn", "n_clicks"),
     ],
     [
-        State("upload-docs", "filename"),  # Get the uploaded file names
-        State("upload-docs", "last_modified"),  # Get the last modified time of the files
-        State("stored-docs", "data"),  # Get the stored data of previously uploaded files
-        State("dashboard-data", "data"),  # Get the current dashboard data
+        State("upload-docs", "filename"),
+        State("upload-docs", "last_modified"),
+        State("stored-docs", "data"),
+        State("dashboard-data", "data"),
     ],
     prevent_initial_call=True,
 )
 def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filenames, last_modified, stored_data, dashboard_data):
     triggered_id = ctx.triggered_id
 
-    # If reset button is clicked, clear everything
+    # RESET: Clear all components
     if triggered_id == "reset-btn":
         return None, [], "", "", "", {"display": "none"}, dash.no_update
 
-    # Handle back button logic
+    # BACK: Restore dashboard table using stored parsed data
     if triggered_id == "back-btn":
         if stored_data:
-            # Add a new entry to the dashboard data
             if not dashboard_data:
                 dashboard_data = []
 
             for file in stored_data:
                 name = file["name"]
                 parsed_data = file.get("parsed_data", {})
+
+                # Attempt to extract patient name from combined_info
+                combined_info = parsed_data.get("combined_info", "")
+                match = re.search(r"(?:Name|Patient)\s*[:\-]?\s*([A-Za-z\s]+)", combined_info)
+                patient_name = match.group(1).strip() if match else name
+
                 dashboard_data.append({
-                    "name": name,
+                    "name": patient_name,
                     "summary": parsed_data.get("summary", "N/A"),
                     "status": "Processed",
                     "missing_docs": parsed_data.get("missing_documents", "N/A")
@@ -57,7 +63,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
 
         return stored_data, [], "", "", "", {"display": "none"}, dashboard_data
 
-    # Handle file upload logic
+    # FILE UPLOAD
     elif triggered_id == "upload-docs":
         if contents is None:
             return stored_data, [], "", "", "", {"display": "none"}, dash.no_update
@@ -86,7 +92,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
 
         return updated_stored, file_previews, "", "", "", {"display": "flex"}, dash.no_update
 
-    # Handle file submission and processing logic
+    # SUBMIT: Process and extract data
     elif triggered_id == "submit-btn":
         if not stored_data:
             return stored_data, [], "", "", "", {"display": "flex"}, dash.no_update
@@ -94,7 +100,6 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
         previews = []
         info_outputs, summary_outputs, missing_outputs = [], [], []
 
-        # Process each uploaded file
         for file in stored_data:
             name, encoded = file["name"], file["content"]
             decoded = base64.b64decode(encoded)
@@ -104,25 +109,22 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                 temp_file.write(decoded)
                 temp_path = temp_file.name
 
-            # Determine file type and process the claim accordingly
             filetype = suffix.lower().strip(".")
             result = process_claim_case([(temp_path, filetype)])
 
-            # Previews for processed files
             previews.append(html.Div([html.P(f"{name} (Processed)")]))
 
-            # Gather the results
             info_outputs.append(result.get("combined_info", ""))
             summary_outputs.append(result.get("claim_summary", ""))
             missing_outputs.append(result.get("missing_documents", ""))
 
-            # Store parsed data for back button functionality
+            # Store everything needed for back button
             file["parsed_data"] = {
                 "summary": result.get("claim_summary", ""),
-                "missing_documents": result.get("missing_documents", "")
+                "missing_documents": result.get("missing_documents", ""),
+                "combined_info": result.get("combined_info", "")
             }
 
-        # Return the processed results and updated UI components
         return (
             stored_data,
             previews,
