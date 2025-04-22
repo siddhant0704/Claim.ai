@@ -45,8 +45,9 @@ You are an expert assistant. First, classify the document into one of the follow
 - Personal Document
 - Prescription
 - Lab Report
+- Other
 
-Then, extract key information in structured JSON format.
+Then, extract key information from each document.
 
 Document:
 \"\"\"
@@ -56,25 +57,32 @@ Document:
     return gpt_call(prompt)
 
 # --- Generate Claim Summary ---
-def generate_claim_summary(combined_info):
+def generate_claim_summary(combined_info, missing_docs):
     prompt = f"""
-You are an expert insurance analyst. Given the extracted document information below, determine:
+You are an expert insurance analyst.
 
-1. Whether this is a valid claim or not (Yes/No).
-2. Justify the decision.
-3. Highlight any missing information required for processing.
+Below is the extracted claim information:
 
-Extracted Info:
 \"\"\"
 {combined_info}
 \"\"\"
 
-Respond in the following format:
+And here is the list of missing documents or important information:
 
-{{
-  "Claim Valid": "Yes/No",
-  "Reasoning": "...",
-}}
+\"\"\"
+{missing_docs}
+\"\"\"
+
+Based on this:
+- If NO missing documents or data are mentioned in the list above, classify the claim as valid.
+- If ANY documents or information are mentioned as missing, mark the claim as invalid.
+
+Structure response like this: 
+
+"Claim Valid": "Yes" or "No",
+
+"Reasoning": "...",
+
     """
     return gpt_call(prompt)
 
@@ -87,8 +95,15 @@ You are a healthcare insurance assistant. Based on the extracted claim data:
 {combined_info}
 \"\"\"
 
-Suggest what key documents or information are missing that could help strengthen the claim (e.g., prescription, diagnosis, billing codes, test results).
+List down what key documents or information are missing that could help strengthen the claim. For example:
+- Prescription
+- Diagnosis
+- Billing codes
+- Test results
+- Hospital discharge notes
+- Doctor's signature
 
+Only list relevant missing items.
     """
     return gpt_call(prompt)
 
@@ -116,8 +131,9 @@ def process_claim_case(documents):
 
     combined_info = "\n\n".join(all_extracted_info)
 
-    claim_summary = generate_claim_summary(combined_info)
+    # 🔧 FIX: Reorder to generate missing_docs first
     missing_docs = suggest_missing_documents(combined_info)
+    claim_summary = generate_claim_summary(combined_info, missing_docs)
 
     return {
         "combined_info": combined_info,
