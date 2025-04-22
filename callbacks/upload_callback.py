@@ -44,20 +44,26 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                 dashboard_data = []
 
             for file in stored_data:
-                name = file["name"]
                 parsed_data = file.get("parsed_data", {})
 
                 # Attempt to extract patient name from combined_info
                 combined_info = parsed_data.get("combined_info", "")
                 match = re.search(r"(?:Name|Patient)\s*[:\-]?\s*([A-Za-z\s]+)", combined_info)
-                patient_name = match.group(1).strip() if match else name
+                patient_name = match.group(1).strip() if match else file["name"]
 
-                dashboard_data.append({
-                    "name": patient_name,
-                    "summary": parsed_data.get("summary", "N/A"),
-                    "status": "Processed",
-                    "missing_docs": parsed_data.get("missing_documents", "N/A")
-                })
+                claim_status = "Processed" if parsed_data.get("summary", "").strip() == "Yes" else "Pending"
+
+                # Avoid duplicate rows
+                if not any(entry["name"] == patient_name for entry in dashboard_data):
+                    dashboard_data.append({
+                        "name": patient_name,
+                        "status": claim_status,
+                        "missing_docs": (
+                            ", ".join(result["missing_documents"])
+                            if isinstance(result.get("missing_documents"), list)
+                            else result.get("missing_documents", "None")
+                        )
+                    })
 
             return stored_data, [], "", "", "", {"display": "none"}, dashboard_data
 
@@ -118,6 +124,21 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
             summary_outputs.append(result.get("claim_summary", ""))
             missing_outputs.append(result.get("missing_documents", ""))
 
+            # Attempt to extract patient name from combined_info
+            combined_info = result.get("combined_info", "")
+            match = re.search(r"(?:Name|Patient)\s*[:\-]?\s*([A-Za-z\s]+)", combined_info)
+            patient_name = match.group(1).strip() if match else name
+
+            claim_status = "Processed" if result.get("claim_summary", "").strip() == "Yes" else "Pending"
+
+            # Avoid duplicate rows
+            if not any(entry["name"] == patient_name for entry in dashboard_data):
+                dashboard_data.append({
+                    "name": patient_name,
+                    "status": claim_status,
+                    "missing_docs": ", ".join(result.get("missing_documents", [])) or "None"
+                })
+
             # Store everything needed for back button
             file["parsed_data"] = {
                 "summary": result.get("claim_summary", ""),
@@ -132,7 +153,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
             "\n".join(summary_outputs),
             "\n".join(missing_outputs),
             {"display": "flex"},
-            dash.no_update
+            dashboard_data  # Pass updated dashboard data
         )
 
     return stored_data, [], "", "", "", {"display": "none"}, dash.no_update

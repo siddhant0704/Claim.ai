@@ -1,3 +1,4 @@
+
 import dash_bootstrap_components as dbc
 from dash import html
 
@@ -22,7 +23,6 @@ landing_page_layout = dbc.Container([
             html.Thead(
                 html.Tr([
                     html.Th("Patient Name", className="table-header"),
-                    html.Th("Claim Summary", className="table-header"),
                     html.Th("Claim Status", className="table-header"),
                     html.Th("Actions", className="table-header")
                 ])

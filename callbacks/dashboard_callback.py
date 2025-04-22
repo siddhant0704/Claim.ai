@@ -16,13 +16,11 @@ def populate_table(dashboard_data):
     for entry in dashboard_data:
         table_rows.append(html.Tr([
             html.Td(entry["name"]),
-            html.Td(entry["summary"]),
             html.Td(entry["status"]),
-            html.Td(entry["missing_docs"])
+            html.Td(entry["missing_docs"])  # Display missing documents
         ]))
 
     return table_rows
-
 
 @callback(
     Output("url", "pathname"),  # Directly update the URL
