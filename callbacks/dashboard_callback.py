@@ -11,18 +11,16 @@ def populate_table(dashboard_data):
     if not dashboard_data:
         return []
 
+    # Debug: Print the dashboard data to verify
+    print("Dashboard Data:", dashboard_data)
+
     # Populate the table rows
     table_rows = []
     for entry in dashboard_data:
-        # Ensure missing_docs is a properly formatted string
-        missing_docs = entry.get("missing_docs", "None")
-        if isinstance(missing_docs, list):
-            missing_docs = ", ".join(missing_docs)  # Join list into a single string
-
         table_rows.append(html.Tr([
             html.Td(entry["name"]),
             html.Td(entry["status"]),
-            html.Td(missing_docs)  # Display missing documents as a single string
+            html.Td(entry["missing_docs"])  # Display missing documents
         ]))
 
     return table_rows
