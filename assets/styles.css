@@ -138,3 +138,18 @@ body {
 .hidden {
   display: none;
 }
+
+.patient-table {
+  font-size: 0.95rem;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 1.1rem;
+}
+
+.table-header {
+  font-weight: 600;
+  color: #495057;
+}

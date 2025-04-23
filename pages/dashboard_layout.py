@@ -1,22 +1,21 @@
-
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 
 landing_page_layout = dbc.Container([
-    html.H1("📋 Patient Claims Dashboard", className="dashboard-title"),
-
-    html.P(
-        "Efficiently manage patient claims. Use the dashboard to view details, upload documents, and track claim status.",
-        className="dashboard-subtitle"
-    ),
-
+    # Header section
     dbc.Row([
+        dbc.Col([
+            html.H2("📋 Patient Claims Dashboard", className="fw-bold mb-2"),
+            html.P(
+                "Easily manage, upload, and track patient claim documents. Streamline your claims processing workflow.",
+                className="text-muted"
+            )
+        ], md=8),
         dbc.Col(
-            dbc.Button("➕ Add Patient", id="add-patient-btn", color="primary", className="add-patient-btn"),
-            width="auto",
-            className="ms-auto"
+            dbc.Button("➕ Add Patient", id="add-patient-btn", color="secondary", className="mt-3 mt-md-0 float-md-end"),
+            md=4
         )
-    ]),
+    ], className="align-items-center mb-4"),
 
     dcc.Loading(
         id="loading-table",
@@ -25,9 +24,9 @@ landing_page_layout = dbc.Container([
             dbc.Table([
                 html.Thead(
                     html.Tr([
-                        html.Th("Patient Name", className="table-header"),
-                        html.Th("Claim Status", className="table-header"),
-                        html.Th("Actions", className="table-header")
+                        html.Th("👤 Patient Name", className="fw-bold mb-2"),
+                        html.Th("📄 Claim Status", className="fw-bold mb-2"),
+                        html.Th("⚙️ Actions", className="fw-bold mb-2")
                     ])
                 ),
                 html.Tbody([], id="patient-table-body")
@@ -38,6 +37,6 @@ landing_page_layout = dbc.Container([
                 striped=True,
                 className="patient-table"
             )
-        ]
+        ], 
     )
 ], fluid=True, className="dashboard-container")

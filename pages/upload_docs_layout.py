@@ -3,12 +3,16 @@ from dash import html, dcc
 
 upload_docs_page_layout = dbc.Container([
 
-    html.H1("📝 Insurance Claim Processor", className="page-title"),
-
-    html.P(
-        "Upload your claim documents and extract insights instantly. Supported formats include PDFs, images, and audio files.",
-        className="page-subtitle"
-    ),
+    # Header section
+    dbc.Row([
+        dbc.Col([
+            html.H2("📝 Insurance Claim Processor", className="fw-bold mb-2"),
+            html.P(
+                "Upload your claim documents and extract insights instantly. Supported formats include PDFs, images, and audio files.",
+                className="text-muted"
+            )
+        ], md=8),
+    ], className="align-items-center mb-4"),
 
     dcc.Upload(
         id='upload-docs',
