@@ -60,7 +60,7 @@ upload_docs_page_layout = dbc.Container([
     dcc.Store(id="stored-docs", data=[]),
 
     dbc.Row([
-        dbc.Col(dbc.Button("⬅️ Back to Dashboard", id="back-btn", color="secondary", className="back-btn", href="/")),
+        dbc.Col(dbc.Button("⬅️ Upload to Dashboard", id="back-btn", color="secondary", className="back-btn", href="/")),
     ], justify="center"),
 
 ], fluid=True, className="upload-page-container")
