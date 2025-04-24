@@ -165,3 +165,77 @@ body {
   transform: translateY(-2px); /* Slight lift on hover */
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
 }
+
+.patient-profile-container {
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.patient-profile-container h4 {
+  color: #1a3c60;
+  margin-bottom: 0.5rem;
+}
+
+.patient-profile-container p {
+  font-size: 1rem;
+  color: #495057;
+}
+
+/* Patient Profile Container */
+.patient-profile-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Styling */
+.card-header {
+  font-weight: 600;
+  font-size: 1.2rem;
+  background-color: #007bff;
+  color: white;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.card-body h4 {
+  color: #1a3c60;
+  margin-bottom: 0.5rem;
+}
+
+.card-body p, .card-body div {
+  font-size: 1rem;
+  color: #495057;
+}
+
+/* Back Button */
+#back-to-dashboard-btn {
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1.5rem;
+  background-color: #6c757d;
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+#back-to-dashboard-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Action Buttons */
+#reach-out-btn, #submit-btn {
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+#reach-out-btn:hover, #submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}

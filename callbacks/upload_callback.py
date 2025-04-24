@@ -18,9 +18,9 @@ from utils import process_claim_case
     ],
     [
         Input("upload-docs", "contents"),
-        Input("submit-btn", "n_clicks"),
-        Input("reset-btn", "n_clicks"),
-        Input("back-btn", "n_clicks"),
+        Input("upload-submit-btn", "n_clicks"),  # Updated ID
+        Input("upload-reset-btn", "n_clicks"),  # Updated ID
+        Input("upload-back-btn", "n_clicks"),  # Updated ID
     ],
     [
         State("upload-docs", "filename"),
@@ -38,11 +38,11 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
         dashboard_data = []
 
     # RESET: Clear all components
-    if triggered_id == "reset-btn":
+    if triggered_id == "upload-reset-btn":  # Updated ID
         return None, [], "", "", "", {"display": "none"}, dashboard_data
 
     # BACK: Update or add a single row for the patient
-    if triggered_id == "back-btn":
+    if triggered_id == "upload-back-btn":  # Updated ID
         if stored_data:
             for file in stored_data:
                 parsed_data = file.get("parsed_data", {})
@@ -111,7 +111,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
         return updated_stored, file_previews, "", "", "", {"display": "flex"}, dashboard_data
 
     # SUBMIT: Process and extract data
-    elif triggered_id == "submit-btn":
+    elif triggered_id == "upload-submit-btn":  # Updated ID
         if not stored_data:
             return stored_data, [], "", "", "", {"display": "flex"}, dashboard_data
 

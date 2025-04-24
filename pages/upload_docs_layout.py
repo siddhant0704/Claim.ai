@@ -2,7 +2,6 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc
 
 upload_docs_page_layout = dbc.Container([
-
     # Header section
     dbc.Row([
         dbc.Col([
@@ -28,11 +27,11 @@ upload_docs_page_layout = dbc.Container([
     dbc.Row([
         dbc.Col(dbc.Button([
             "Process Claim"
-        ], id="submit-btn", color="primary", className="action-btn btn-sm"), md=2),
+        ], id="upload-submit-btn", color="primary", className="action-btn btn-sm"), md=2),  # Updated ID
 
         dbc.Col(dbc.Button([
             "Start Over"
-        ], id="reset-btn", color="danger", className="action-btn btn-sm"), md=2),
+        ], id="upload-reset-btn", color="danger", className="action-btn btn-sm"), md=2),  # Updated ID
     ], justify="center", id="action-buttons", className="hidden"),
 
     html.Div(id="file-preview", className="mb-4"),
@@ -69,7 +68,7 @@ upload_docs_page_layout = dbc.Container([
     dcc.Store(id="stored-docs", data=[]),
 
     dbc.Row([
-        dbc.Col(dbc.Button("Upload to Dashboard", id="back-btn", color="secondary", className="action-btn back-btn", href="/")),
+        dbc.Col(dbc.Button("Upload to Dashboard", id="upload-back-btn", color="secondary", className="action-btn back-btn", href="/")),  # Updated ID
     ], justify="center"),
 
 ], fluid=True, className="upload-page-container")

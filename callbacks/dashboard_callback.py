@@ -5,20 +5,17 @@ from dash import dcc
 @callback(
     Output("patient-table-body", "children"),  # Update patient table
     Input("dashboard-data", "data"),  # Retrieve current dashboard data
-    prevent_initial_call=True,
+    prevent_initial_call=False,  # Ensure this callback is triggered on page load
 )
 def populate_table(dashboard_data):
     if not dashboard_data:
         return []
 
-    # Debug: Print the dashboard data to verify
-    print("Dashboard Data:", dashboard_data)
-
     # Populate the table rows
     table_rows = []
     for entry in dashboard_data:
         table_rows.append(html.Tr([
-            html.Td(entry["name"]),
+            html.Td(dcc.Link(entry["name"], href=f"/profile?patient={entry['name']}")),  # Hyperlink patient name
             html.Td(entry["status"]),
             html.Td(entry["missing_docs"])  # Display missing documents
         ]))
