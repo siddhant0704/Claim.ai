@@ -12,7 +12,7 @@ landing_page_layout = dbc.Container([
             )
         ], md=8),
         dbc.Col(
-            dbc.Button("➕ Add Patient", id="add-patient-btn", color="secondary", className="mt-3 mt-md-0 float-md-end"),
+            dbc.Button("Add Patient", id="add-patient-btn", color="secondary", className="mt-3 mt-md-0 float-md-end"),
             md=4
         )
     ], className="align-items-center mb-4"),

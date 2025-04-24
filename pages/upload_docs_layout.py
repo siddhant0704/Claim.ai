@@ -26,8 +26,13 @@ upload_docs_page_layout = dbc.Container([
     ),
 
     dbc.Row([
-        dbc.Col(dbc.Button("🚀 Process Claim", id="submit-btn", color="primary", className="action-btn"), md=4),
-        dbc.Col(dbc.Button("🔄 Start Over", id="reset-btn", color="danger", className="action-btn"), md=4),
+        dbc.Col(dbc.Button([
+            "Process Claim"
+        ], id="submit-btn", color="primary", className="action-btn btn-sm"), md=2),
+
+        dbc.Col(dbc.Button([
+            "Start Over"
+        ], id="reset-btn", color="danger", className="action-btn btn-sm"), md=2),
     ], justify="center", id="action-buttons", className="hidden"),
 
     html.Div(id="file-preview", className="mb-4"),
@@ -64,7 +69,7 @@ upload_docs_page_layout = dbc.Container([
     dcc.Store(id="stored-docs", data=[]),
 
     dbc.Row([
-        dbc.Col(dbc.Button("⬅️ Upload to Dashboard", id="back-btn", color="secondary", className="back-btn", href="/")),
+        dbc.Col(dbc.Button("Upload to Dashboard", id="back-btn", color="secondary", className="action-btn back-btn", href="/")),
     ], justify="center"),
 
 ], fluid=True, className="upload-page-container")
