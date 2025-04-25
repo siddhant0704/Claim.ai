@@ -17,6 +17,24 @@ landing_page_layout = dbc.Container([
         )
     ], className="align-items-center mb-4"),
 
+    # Metrics Row
+    dbc.Row([
+        dbc.Col(html.Div([
+            html.H5("Total Patients", className="metric-label"),
+            html.H3(id="metric-total", className="metric-value")
+        ], className="metric-card text-center"), md=4),
+        dbc.Col(html.Div([
+            html.H5("Under Approval", className="metric-label"),
+            html.H3(id="metric-under-approval", className="metric-value text-success")
+        ], className="metric-card text-center"), md=4),
+        dbc.Col(html.Div([
+            html.H5("Pending", className="metric-label"),
+            html.H3(id="metric-pending", className="metric-value text-warning")
+        ], className="metric-card text-center"), md=4),
+    ], className="mb-4"),
+
+    html.Hr(style={"margin": "2rem 0"}), 
+
     dcc.Loading(
         id="loading-table",
         type="circle",

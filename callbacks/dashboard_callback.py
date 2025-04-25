@@ -50,3 +50,21 @@ def navigate_to_upload(add_patient_clicks):
 
     return dash.no_update
 
+@callback(
+    [
+        Output("metric-total", "children"),
+        Output("metric-under-approval", "children"),
+        Output("metric-pending", "children"),
+    ],
+    Input("dashboard-data", "data"),
+    prevent_initial_call=False,
+)
+def update_metrics(dashboard_data):
+    if not dashboard_data:
+        return 0, 0, 0
+
+    total = len(dashboard_data)
+    under_approval = sum(1 for entry in dashboard_data if entry.get("status", "").lower() == "submitted for approval")
+    pending = sum(1 for entry in dashboard_data if entry.get("status", "").lower() == "pending")
+    return total, under_approval, pending
+

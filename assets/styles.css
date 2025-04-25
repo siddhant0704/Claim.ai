@@ -248,3 +248,36 @@ body {
   color: black; /* Set text color to black */
   border-bottom: 1px solid #dee2e6;
 }
+
+/* Metrics Card Styling */
+.metric-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.metric-label {
+  font-size: 1.1rem;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.metric-value.text-success {
+  color: #198754 !important;
+}
+
+.metric-value.text-warning {
+  color: #ffc107 !important;
+}
