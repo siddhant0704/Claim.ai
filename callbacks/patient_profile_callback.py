@@ -1,3 +1,4 @@
+import dash
 from dash import Input, Output, State, callback, html
 from urllib.parse import parse_qs
 from utils import format_combined_info
@@ -75,3 +76,43 @@ def toggle_submit_modal(submit_clicks, close_clicks, is_open):
     if submit_clicks or close_clicks:
         return not is_open
     return is_open
+
+from dash import Input, Output, State, callback, html, ctx
+from urllib.parse import parse_qs
+
+@callback(
+    Output("dashboard-data", "data", allow_duplicate=True),  # <-- Add allow_duplicate=True
+    [
+        Input("submit-btn", "n_clicks"),
+        Input("reach-out-btn", "n_clicks"),
+    ],
+    [
+        State("url", "search"),
+        State("dashboard-data", "data"),
+    ],
+    prevent_initial_call=True,
+)
+def update_claim_status(submit_clicks, reach_out_clicks, search, dashboard_data):
+    if not dashboard_data:
+        return dash.no_update
+
+    query_params = parse_qs(search.lstrip("?"))
+    patient_name = query_params.get("patient", [None])[0]
+    if not patient_name:
+        return dash.no_update
+
+    triggered_id = ctx.triggered_id
+    new_status = None
+    if triggered_id == "submit-btn":
+        new_status = "Submitted for Approval"
+    elif triggered_id == "reach-out-btn":
+        new_status = "Requested Additional Info"
+
+    if new_status:
+        for entry in dashboard_data:
+            if entry["name"] == patient_name:
+                entry["status"] = new_status
+                break
+        return dashboard_data
+
+    return dash.no_update

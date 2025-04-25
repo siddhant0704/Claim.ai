@@ -10,19 +10,28 @@ from dash import dcc
 def populate_table(dashboard_data):
     if not dashboard_data:
         return []
+    
+    def status_badge(status):
+        color = "secondary"
+        if status.lower() == "pending":
+            color = "warning"
+        elif status.lower() == "submitted for approval":
+            color = "success"
+        elif status.lower() == "requested additional info":
+            color = "danger"
+        return dbc.Badge(status, color=color, className="fw-bold", pill=True)
 
     table_rows = []
     for entry in dashboard_data:
         patient_name = entry["name"]
         patient_url = f"/profile?patient={patient_name}"
-        print(f"DEBUG: Generating URL for patient {patient_name}: {patient_url}")
-
         summary = entry.get("summary", "No summary available")
+        status = entry.get("status", "Pending")
 
         table_rows.append(html.Tr([
             html.Td(dcc.Link(patient_name, href=patient_url)),
             html.Td(summary),
-            html.Td(entry["status"]),
+            html.Td(status_badge(status)),
         ]))
 
     return table_rows
@@ -40,3 +49,4 @@ def navigate_to_upload(add_patient_clicks):
         return "/upload"
 
     return dash.no_update
+

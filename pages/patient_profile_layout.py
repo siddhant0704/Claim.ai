@@ -48,7 +48,7 @@ patient_profile_layout = dbc.Container([
     # Modal for submission confirmation
     dbc.Modal(
         [
-            dbc.ModalHeader(dbc.ModalTitle("Submission Successful")),
+            dbc.ModalHeader(dbc.ModalTitle("Submission Successful!")),
             dbc.ModalBody("This patient's claim report is submitted to insurance company for approval."),
             dbc.ModalFooter(
                 dbc.Button("Close", id="close-submit-modal", className="ms-auto", n_clicks=0)
