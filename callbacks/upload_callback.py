@@ -44,43 +44,48 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
     # BACK: Update or add a single row for the patient
     if triggered_id == "upload-back-btn":
         if stored_data:
+            # Aggregate all docs for this patient
+            # Try to extract patient name from the first doc with parsed data
+            patient_name = None
+            summary = ""
+            claim_status = "Pending"
+            missing_docs = ""
             for file in stored_data:
                 parsed_data = file.get("parsed_data", {})
-
-                # Extract patient name or fallback to file name
                 combined_info = parsed_data.get("combined_info", "")
-                match = re.search(r"Patient Name:\s*([A-Za-z\s]+)", combined_info)  # Updated regex to match "Patient Name"
-                patient_name = match.group(1).strip() if match else file["name"]
+                match = re.search(r"Patient Name:\s*([A-Za-z\s]+)", combined_info)
+                if match:
+                    patient_name = match.group(1).strip()
+                    summary = parsed_data.get("patient_summary", "")
+                    claim_status = "Processed" if parsed_data.get("summary", "").strip() == "Yes" else "Pending"
+                    missing_docs = parsed_data.get("missing_documents", "")
+                    break
+            if not patient_name:
+                # Fallback to first file name if patient name not found
+                patient_name = stored_data[0]["name"]
 
-                # Determine claim status
-                claim_status = "Processed" if parsed_data.get("summary", "").strip() == "Yes" else "Pending"
+            # Check if patient already exists
+            found = False
+            for entry in dashboard_data:
+                if entry["name"] == patient_name:
+                    # Update the existing row: merge stored_docs
+                    entry["status"] = claim_status
+                    entry["missing_docs"] = missing_docs or "None"
+                    entry["stored_docs"] = stored_data
+                    entry["summary"] = summary
+                    found = True
+                    break
+            if not found:
+                # Add new row for patient
+                dashboard_data.append({
+                    "name": patient_name,
+                    "status": claim_status,
+                    "missing_docs": missing_docs or "None",
+                    "stored_docs": stored_data,
+                    "summary": summary,
+                })
 
-                # Format missing_docs as a single string
-                missing_docs = parsed_data.get("missing_documents", [])
-                if isinstance(missing_docs, list):
-                    missing_docs = ", ".join(missing_docs)
-
-                # Check if the patient already exists in the dashboard data
-                for entry in dashboard_data:
-                    if entry["name"] == patient_name:
-                        # Update the existing row
-                        entry["status"] = claim_status
-                        entry["missing_docs"] = missing_docs or "None"
-                        entry["stored_docs"] = stored_data
-                        break
-                else:
-                    # If patient not found, add a new row
-                    dashboard_data.append({
-                        "name": patient_name,
-                        "status": claim_status,
-                        "missing_docs": missing_docs or "None",
-                        "stored_docs": stored_data,
-                        "summary": file["parsed_data"].get("patient_summary", ""),  # <-- Add this line
-                    })
-
-            # Debugging: Print updated dashboard data
             print(f"DEBUG: Updated dashboard data: {dashboard_data}")
-
             return stored_data, [], "", "", "", {"display": "none"}, dashboard_data
 
         return stored_data, [], "", "", "", {"display": "none"}, dashboard_data
@@ -155,7 +160,6 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                 "combined_info": result.get("combined_info", ""),
                 "patient_summary": summary,  
                 "doc_type": doc_type,  
-
             }
 
         return (
