@@ -141,3 +141,14 @@ def process_claim_case(documents):
         "missing_documents": missing_docs,
         "combined_text": combined_text
     }
+
+def generate_patient_summary(combined_info):
+    prompt = f"""
+Summarize the following patient claim information in 2-3 crisp sentences. Include the patient's name, age, gender, hospital, and a brief mention of their condition or claim reason. Be concise and clear.
+
+Information:
+\"\"\"
+{combined_info}
+\"\"\"
+"""
+    return gpt_call(prompt)

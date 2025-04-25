@@ -4,7 +4,7 @@ import base64
 import os
 import tempfile
 import re  # For extracting patient name
-from utils import process_claim_case
+from utils import process_claim_case, generate_patient_summary
 
 @callback(
     [
@@ -75,6 +75,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                         "status": claim_status,
                         "missing_docs": missing_docs or "None",
                         "stored_docs": stored_data,
+                        "summary": file["parsed_data"].get("patient_summary", ""),  # <-- Add this line
                     })
 
             # Debugging: Print updated dashboard data
@@ -133,6 +134,9 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
             filetype = suffix.lower().strip(".")
             result = process_claim_case([(temp_path, filetype)])
 
+            # Generate a crisp summary
+            summary = generate_patient_summary(result.get("combined_info", ""))
+
             previews.append(html.Div([html.P(f"{name} (Processed)")]))
 
             info_outputs.append(result.get("combined_info", ""))
@@ -143,7 +147,8 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
             file["parsed_data"] = {
                 "summary": result.get("claim_summary", ""),
                 "missing_documents": result.get("missing_documents", ""),
-                "combined_info": result.get("combined_info", "")
+                "combined_info": result.get("combined_info", ""),
+                "patient_summary": summary,  # <-- Add this line
             }
 
         return (
