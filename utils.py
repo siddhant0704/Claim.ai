@@ -4,6 +4,7 @@ import pytesseract
 from PIL import Image
 from pdfminer.high_level import extract_text
 from openai import OpenAI
+from dash import html
 
 # Load environment variables from .env file
 load_dotenv()
@@ -152,3 +153,24 @@ Information:
 \"\"\"
 """
     return gpt_call(prompt)
+
+def format_combined_info(combined_info):
+    """
+    Converts the combined_info string into a structured HTML list for display.
+    """
+    import re
+    if not combined_info:
+        return "No information available"
+
+    # Split into lines and filter out empty lines
+    lines = [line.strip() for line in combined_info.splitlines() if line.strip()]
+    items = []
+    for line in lines:
+        # Try to split on the first colon for key-value pairs
+        if ":" in line:
+            key, value = line.split(":", 1)
+            items.append(html.Tr([html.Td(html.B(key.strip() + ":")), html.Td(value.strip())]))
+        else:
+            # If not a key-value, just show the line
+            items.append(html.Tr([html.Td(line, colSpan=2)]))
+    return html.Table(items, className="table table-sm table-borderless")

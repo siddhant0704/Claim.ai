@@ -1,5 +1,6 @@
 from dash import Input, Output, State, callback, html
 from urllib.parse import parse_qs
+from utils import format_combined_info
 
 @callback(
     [
@@ -51,12 +52,12 @@ def load_patient_profile(search, dashboard_data):
                     previews.append(html.Div([
                         html.P(f"{doc_type} (No preview)")
                     ]))
+            
+            combined_info_html = format_combined_info(entry.get("stored_docs", [{}])[0].get("parsed_data", {}).get("combined_info", ""))
 
             return (
                 entry["name"],
-                html.Div([
-                    html.P(entry.get("summary", "No summary available"))
-                ]),
+                combined_info_html,
                 previews,  # <-- Uploaded docs preview
                 entry.get("missing_docs", "No missing documents"),
             )
