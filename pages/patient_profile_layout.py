@@ -44,4 +44,18 @@ patient_profile_layout = dbc.Container([
         dbc.Col(dbc.Button("Reach Out to Patient", id="reach-out-btn", color="primary", className="me-2"), width="auto"),
         dbc.Col(dbc.Button("Submit to Insurance Agency", id="submit-btn", color="success"), width="auto"),
     ], justify="center"),
+    
+    # Modal for submission confirmation
+    dbc.Modal(
+        [
+            dbc.ModalHeader(dbc.ModalTitle("Submission Successful")),
+            dbc.ModalBody("This patient's claim report is submitted to insurance company for approval."),
+            dbc.ModalFooter(
+                dbc.Button("Close", id="close-submit-modal", className="ms-auto", n_clicks=0)
+            ),
+        ],
+        id="submit-modal",
+        is_open=False,
+        centered=True,
+    ),
 ], fluid=True, className="patient-profile-container")

@@ -64,3 +64,14 @@ def load_patient_profile(search, dashboard_data):
 
     print(f"DEBUG: Patient {patient_name} not found in dashboard-data.")
     return "N/A", "No information available", [], "No missing documents"
+
+@callback(
+    Output("submit-modal", "is_open"),
+    [Input("submit-btn", "n_clicks"), Input("close-submit-modal", "n_clicks")],
+    [State("submit-modal", "is_open")],
+    prevent_initial_call=True,
+)
+def toggle_submit_modal(submit_clicks, close_clicks, is_open):
+    if submit_clicks or close_clicks:
+        return not is_open
+    return is_open
