@@ -13,15 +13,16 @@ def populate_table(dashboard_data):
 
     table_rows = []
     for entry in dashboard_data:
-        # Use the correct patient name
         patient_name = entry["name"]
         patient_url = f"/profile?patient={patient_name}"
         print(f"DEBUG: Generating URL for patient {patient_name}: {patient_url}")
 
+        summary = entry.get("summary", "No summary available")
+
         table_rows.append(html.Tr([
-            html.Td(dcc.Link(patient_name, href=patient_url)),  # Hyperlink patient name
+            html.Td(dcc.Link(patient_name, href=patient_url)),
+            html.Td(summary),
             html.Td(entry["status"]),
-            html.Td(entry["missing_docs"])
         ]))
 
     return table_rows

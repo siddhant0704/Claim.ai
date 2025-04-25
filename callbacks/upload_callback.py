@@ -143,12 +143,19 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
             summary_outputs.append(result.get("claim_summary", ""))
             missing_outputs.append(result.get("missing_documents", ""))
 
+            # Extract document type/category from combined_info
+            combined_info = result.get("combined_info", "")
+            doc_type_match = re.search(r"Category:\s*([^\n]+)", combined_info)
+            doc_type = doc_type_match.group(1).strip() if doc_type_match else "Unknown"
+
             # Store parsed data for back button functionality
             file["parsed_data"] = {
                 "summary": result.get("claim_summary", ""),
                 "missing_documents": result.get("missing_documents", ""),
                 "combined_info": result.get("combined_info", ""),
-                "patient_summary": summary,  # <-- Add this line
+                "patient_summary": summary,  
+                "doc_type": doc_type,  
+
             }
 
         return (

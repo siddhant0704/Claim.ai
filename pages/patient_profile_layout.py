@@ -29,6 +29,9 @@ patient_profile_layout = dbc.Container([
                     html.H4("Basic Info:", className="fw-bold mt-4"),
                     html.Div(id="patient-info", className="text-muted mb-3"),  # Parsed info will be dynamically populated
 
+                    html.H4("Uploaded Documents:", className="fw-bold mt-4"),
+                    html.Div(id="uploaded-docs-preview", className="mb-3"),  # <-- Add this line
+
                     html.H4("Missing Documents:", className="fw-bold mt-4"),
                     html.Div(id="missing-docs", className="text-muted"),  # Missing documents will be dynamically populated
                 ])

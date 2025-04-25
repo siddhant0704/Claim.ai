@@ -1,13 +1,11 @@
 from dash import Input, Output, State, callback, html
 from urllib.parse import parse_qs
 
-from dash import Input, Output, State, callback, html
-from urllib.parse import parse_qs
-
 @callback(
     [
         Output("patient-name", "children"),
         Output("patient-info", "children"),
+        Output("uploaded-docs-preview", "children"),  # <-- Add this output
         Output("missing-docs", "children"),
     ],
     Input("url", "search"),
@@ -19,26 +17,49 @@ def load_patient_profile(search, dashboard_data):
 
     if not dashboard_data:
         print("DEBUG: dashboard-data is empty.")
-        return "N/A", "No information available", "No missing documents"
+        return "N/A", "No information available", [], "No missing documents"
 
     query_params = parse_qs(search.lstrip("?"))
     patient_name = query_params.get("patient", [None])[0]
 
     if not patient_name:
         print("DEBUG: Patient name not found in query parameters.")
-        return "N/A", "No information available", "No missing documents"
+        return "N/A", "No information available", [], "No missing documents"
 
     for entry in dashboard_data:
         if entry["name"] == patient_name:
             print(f"DEBUG: Found patient data for {patient_name}: {entry}")
+
+            # Generate document previews
+            previews = []
+            for doc in entry.get("stored_docs", []):
+                name = doc.get("name", "Unknown")
+                content = doc.get("content", "")
+                ext = name.split(".")[-1].lower()
+                doc_type = doc.get("parsed_data", {}).get("doc_type", "Unknown")
+
+                if ext in ["jpg", "jpeg", "png"]:
+                    previews.append(html.Div([
+                        html.P(f"{doc_type}"),
+                        html.Img(src=f"data:image/{ext};base64,{content}", style={"height": "100px"})
+                    ]))
+                elif ext == "pdf":
+                    previews.append(html.Div([
+                        html.P(f"{doc_type} (PDF preview not supported)")
+                    ]))
+                else:
+                    previews.append(html.Div([
+                        html.P(f"{doc_type} (No preview)")
+                    ]))
+
             return (
-                entry["name"],  # Patient name
+                entry["name"],
                 html.Div([
-                    html.P(f"Claim Status: {entry.get('status', 'N/A')}"),
                     html.P(entry.get("summary", "No summary available"))
                 ]),
+                previews,  # <-- Uploaded docs preview
                 entry.get("missing_docs", "No missing documents"),
             )
 
     print(f"DEBUG: Patient {patient_name} not found in dashboard-data.")
-    return "N/A", "No information available", "No missing documents"
+    return "N/A", "No information available", [], "No missing documents"

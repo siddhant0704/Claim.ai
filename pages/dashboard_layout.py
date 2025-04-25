@@ -5,7 +5,7 @@ landing_page_layout = dbc.Container([
     # Header section
     dbc.Row([
         dbc.Col([
-            html.H2("📋 Patient Claims Dashboard", className="fw-bold mb-2"),
+            html.H2("📋 Welcome to Claims Dashboard", className="fw-bold mb-2"),
             html.P(
                 "Easily manage, upload, and track patient claim documents. Streamline your claims processing workflow.",
                 className="text-muted"
@@ -25,8 +25,9 @@ landing_page_layout = dbc.Container([
                 html.Thead(
                     html.Tr([
                         html.Th("👤 Patient Name", className="fw-bold mb-2"),
-                        html.Th("📄 Claim Status", className="fw-bold mb-2"),
-                        html.Th("⚙️ Actions", className="fw-bold mb-2")
+                        html.Th("📝 Summary", className="fw-bold mb-2"), 
+                        html.Th("📄 Claim Status", className="fw-bold mb-2")
+
                     ])
                 ),
                 html.Tbody([], id="patient-table-body")
