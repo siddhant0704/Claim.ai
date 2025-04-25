@@ -1,6 +1,9 @@
 from dash import Input, Output, State, callback, html
 from urllib.parse import parse_qs
 
+from dash import Input, Output, State, callback, html
+from urllib.parse import parse_qs
+
 @callback(
     [
         Output("patient-name", "children"),
@@ -9,10 +12,12 @@ from urllib.parse import parse_qs
     ],
     Input("url", "search"),  # Capture query parameters from the URL
     State("dashboard-data", "data"),  # Access the dashboard data
-    prevent_initial_call=True,
+    prevent_initial_call=False,
 )
 def load_patient_profile(search, dashboard_data):
-    # Debugging: Check if dashboard_data is empty
+    # Debugging: Print the search parameter
+    print(f"DEBUG: URL search parameter: {search}")
+
     if not dashboard_data:
         print("DEBUG: dashboard-data is empty.")
         return "N/A", "No information available", "No missing documents"

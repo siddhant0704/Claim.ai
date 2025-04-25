@@ -38,13 +38,12 @@ app.layout = html.Div([
 def display_page(pathname, dashboard_data):
     if pathname == "/upload":
         return upload_docs_page_layout
-    elif pathname == "/profile":
-        return patient_profile_layout  # Route to the patient profile page
+    elif pathname.startswith("/profile"):
+        return patient_profile_layout  # Route to the patient profile page for any /profile?...
     elif pathname == "/":
-        # Repopulate the dashboard table when navigating back
-        populate_table(dashboard_data)  # Explicitly call the table population callback
+        populate_table(dashboard_data)
         return landing_page_layout
-    return landing_page_layout  # Default to dashboard
+    return landing_page_layout
 
 # Run the app
 if __name__ == "__main__":

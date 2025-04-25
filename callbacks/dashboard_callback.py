@@ -3,21 +3,25 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 
 @callback(
-    Output("patient-table-body", "children"),  # Update patient table
-    Input("dashboard-data", "data"),  # Retrieve current dashboard data
-    prevent_initial_call=False,  # Ensure this callback is triggered on page load
+    Output("patient-table-body", "children"),
+    Input("dashboard-data", "data"),
+    prevent_initial_call=False,
 )
 def populate_table(dashboard_data):
     if not dashboard_data:
         return []
 
-    # Populate the table rows
     table_rows = []
     for entry in dashboard_data:
+        # Use the correct patient name
+        patient_name = entry["name"]
+        patient_url = f"/profile?patient={patient_name}"
+        print(f"DEBUG: Generating URL for patient {patient_name}: {patient_url}")
+
         table_rows.append(html.Tr([
-            html.Td(dcc.Link(entry["name"], href=f"/profile?patient={entry['name']}")),  # Hyperlink patient name
+            html.Td(dcc.Link(patient_name, href=patient_url)),  # Hyperlink patient name
             html.Td(entry["status"]),
-            html.Td(entry["missing_docs"])  # Display missing documents
+            html.Td(entry["missing_docs"])
         ]))
 
     return table_rows

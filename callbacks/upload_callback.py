@@ -18,9 +18,9 @@ from utils import process_claim_case
     ],
     [
         Input("upload-docs", "contents"),
-        Input("upload-submit-btn", "n_clicks"),  # Updated ID
-        Input("upload-reset-btn", "n_clicks"),  # Updated ID
-        Input("upload-back-btn", "n_clicks"),  # Updated ID
+        Input("upload-submit-btn", "n_clicks"),
+        Input("upload-reset-btn", "n_clicks"),
+        Input("upload-back-btn", "n_clicks"),
     ],
     [
         State("upload-docs", "filename"),
@@ -38,18 +38,18 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
         dashboard_data = []
 
     # RESET: Clear all components
-    if triggered_id == "upload-reset-btn":  # Updated ID
+    if triggered_id == "upload-reset-btn":
         return None, [], "", "", "", {"display": "none"}, dashboard_data
 
     # BACK: Update or add a single row for the patient
-    if triggered_id == "upload-back-btn":  # Updated ID
+    if triggered_id == "upload-back-btn":
         if stored_data:
             for file in stored_data:
                 parsed_data = file.get("parsed_data", {})
 
                 # Extract patient name or fallback to file name
                 combined_info = parsed_data.get("combined_info", "")
-                match = re.search(r"(?:Name|Patient)\s*[:\-]?\s*([A-Za-z\s]+)", combined_info)
+                match = re.search(r"Patient Name:\s*([A-Za-z\s]+)", combined_info)  # Updated regex to match "Patient Name"
                 patient_name = match.group(1).strip() if match else file["name"]
 
                 # Determine claim status
@@ -58,7 +58,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                 # Format missing_docs as a single string
                 missing_docs = parsed_data.get("missing_documents", [])
                 if isinstance(missing_docs, list):
-                    missing_docs = ", ".join(missing_docs)  # Join list into a single string
+                    missing_docs = ", ".join(missing_docs)
 
                 # Check if the patient already exists in the dashboard data
                 for entry in dashboard_data:
@@ -66,7 +66,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                         # Update the existing row
                         entry["status"] = claim_status
                         entry["missing_docs"] = missing_docs or "None"
-                        entry["stored_docs"] = stored_data  # Update stored docs
+                        entry["stored_docs"] = stored_data
                         break
                 else:
                     # If patient not found, add a new row
@@ -76,6 +76,9 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
                         "missing_docs": missing_docs or "None",
                         "stored_docs": stored_data,
                     })
+
+            # Debugging: Print updated dashboard data
+            print(f"DEBUG: Updated dashboard data: {dashboard_data}")
 
             return stored_data, [], "", "", "", {"display": "none"}, dashboard_data
 
@@ -111,7 +114,7 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
         return updated_stored, file_previews, "", "", "", {"display": "flex"}, dashboard_data
 
     # SUBMIT: Process and extract data
-    elif triggered_id == "upload-submit-btn":  # Updated ID
+    elif triggered_id == "upload-submit-btn":
         if not stored_data:
             return stored_data, [], "", "", "", {"display": "flex"}, dashboard_data
 
