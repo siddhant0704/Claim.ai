@@ -321,3 +321,9 @@ body {
   vertical-align: middle;
   white-space: pre-line;
 }
+
+.patient-table {
+  border-radius: 12px !important;
+  overflow: hidden; /* Ensures child elements respect the border radius */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
