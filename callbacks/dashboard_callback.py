@@ -30,7 +30,7 @@ def populate_table(dashboard_data):
 
         table_rows.append(html.Tr([
             html.Td(dcc.Link(patient_name, href=patient_url)),
-            html.Td(summary),
+            html.Td(summary, className="summary-left-align"),
             html.Td(status_badge(status)),
         ]))
 
