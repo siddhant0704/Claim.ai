@@ -315,3 +315,15 @@ body {
   max-width: 100px;
   max-height: 100px;
 }
+
+.summary-left-align {
+  text-align: left !important;
+  vertical-align: middle;
+  white-space: pre-line;
+}
+
+.patient-table {
+  border-radius: 12px !important;
+  overflow: hidden; /* Ensures child elements respect the border radius */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}

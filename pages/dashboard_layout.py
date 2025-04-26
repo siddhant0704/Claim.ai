@@ -5,7 +5,7 @@ landing_page_layout = dbc.Container([
     # Header section
     dbc.Row([
         dbc.Col([
-            html.H2("📋 Welcome to Claims.ai Dashboard", className="fw-bold mb-2"),
+            html.H2("📋 Welcome to Claims.ai Dashboard!", className="fw-bold mb-2"),
             html.P(
                 "Easily manage, upload, and track patient claim documents. Streamline your claims processing workflow.",
                 className="text-muted"
@@ -24,7 +24,7 @@ landing_page_layout = dbc.Container([
             html.H3(id="metric-total", className="metric-value")
         ], className="metric-card text-center"), md=4),
         dbc.Col(html.Div([
-            html.H5("Under Approval", className="metric-label"),
+            html.H5("Under Review", className="metric-label"),
             html.H3(id="metric-under-approval", className="metric-value text-success")
         ], className="metric-card text-center"), md=4),
         dbc.Col(html.Div([
