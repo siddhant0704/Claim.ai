@@ -4,6 +4,7 @@ import pytesseract
 from PIL import Image
 from pdfminer.high_level import extract_text
 from openai import OpenAI
+from dash import html
 
 # Load environment variables from .env file
 load_dotenv()
@@ -45,8 +46,9 @@ You are an expert assistant. First, classify the document into one of the follow
 - Personal Document
 - Prescription
 - Lab Report
+- Other
 
-Then, extract key information in structured JSON format.
+Then, extract key information from each document.
 
 Document:
 \"\"\"
@@ -56,25 +58,32 @@ Document:
     return gpt_call(prompt)
 
 # --- Generate Claim Summary ---
-def generate_claim_summary(combined_info):
+def generate_claim_summary(combined_info, missing_docs):
     prompt = f"""
-You are an expert insurance analyst. Given the extracted document information below, determine:
+You are an expert insurance analyst.
 
-1. Whether this is a valid claim or not (Yes/No).
-2. Justify the decision.
-3. Highlight any missing information required for processing.
+Below is the extracted claim information:
 
-Extracted Info:
 \"\"\"
 {combined_info}
 \"\"\"
 
-Respond in the following format:
+And here is the list of missing documents or important information:
 
-{{
-  "Claim Valid": "Yes/No",
-  "Reasoning": "...",
-}}
+\"\"\"
+{missing_docs}
+\"\"\"
+
+Based on this:
+- If NO missing documents or data are mentioned in the list above, classify the claim as valid.
+- If ANY documents or information are mentioned as missing, mark the claim as invalid.
+
+Structure response like this: 
+
+"Claim Valid": "Yes" or "No",
+
+"Reasoning": "...",
+
     """
     return gpt_call(prompt)
 
@@ -87,8 +96,15 @@ You are a healthcare insurance assistant. Based on the extracted claim data:
 {combined_info}
 \"\"\"
 
-Suggest what key documents or information are missing that could help strengthen the claim (e.g., prescription, diagnosis, billing codes, test results).
+List down what key documents or information are missing that could help strengthen the claim. For example:
+- Prescription
+- Diagnosis
+- Billing codes
+- Test results
+- Hospital discharge notes
+- Doctor's signature
 
+Only list relevant missing items.
     """
     return gpt_call(prompt)
 
@@ -103,7 +119,7 @@ def process_claim_case(documents):
     for file_path, file_type in documents:
         if file_type == "pdf":
             text = extract_text_from_pdf(file_path)
-        elif file_type == "image":
+        elif file_type in ["image", "png", "jpg", "jpeg"]:  # Accept png as an image type
             text = extract_text_from_image(file_path)
         elif file_type == "audio":
             text = transcribe_audio(file_path)
@@ -116,8 +132,9 @@ def process_claim_case(documents):
 
     combined_info = "\n\n".join(all_extracted_info)
 
-    claim_summary = generate_claim_summary(combined_info)
+    # 🔧 FIX: Reorder to generate missing_docs first
     missing_docs = suggest_missing_documents(combined_info)
+    claim_summary = generate_claim_summary(combined_info, missing_docs)
 
     return {
         "combined_info": combined_info,
@@ -125,3 +142,35 @@ def process_claim_case(documents):
         "missing_documents": missing_docs,
         "combined_text": combined_text
     }
+
+def generate_patient_summary(combined_info):
+    prompt = f"""
+Summarize the following patient claim information in 2-3 crisp sentences. Include the patient's name, age, gender, hospital, and a brief mention of their condition or claim reason. Be concise and clear.
+
+Information:
+\"\"\"
+{combined_info}
+\"\"\"
+"""
+    return gpt_call(prompt)
+
+def format_combined_info(combined_info):
+    """
+    Converts the combined_info string into a structured HTML list for display.
+    """
+    import re
+    if not combined_info:
+        return "No information available"
+
+    # Split into lines and filter out empty lines
+    lines = [line.strip() for line in combined_info.splitlines() if line.strip()]
+    items = []
+    for line in lines:
+        # Try to split on the first colon for key-value pairs
+        if ":" in line:
+            key, value = line.split(":", 1)
+            items.append(html.Tr([html.Td(html.B(key.strip() + ":")), html.Td(value.strip())]))
+        else:
+            # If not a key-value, just show the line
+            items.append(html.Tr([html.Td(line, colSpan=2)]))
+    return html.Table(items, className="table table-sm table-borderless")
