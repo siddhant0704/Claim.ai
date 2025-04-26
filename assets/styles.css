@@ -281,3 +281,37 @@ body {
 .metric-value.text-warning {
   color: #ffc107 !important;
 }
+
+.patient-info-table table {
+  width: 100%;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.patient-info-table tr:nth-child(even) {
+  background: #f1f3f4;
+}
+.patient-info-table td {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+.uploaded-docs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.uploaded-docs-grid > div {
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  padding: 0.5rem;
+  text-align: center;
+  min-width: 120px;
+}
+.uploaded-docs-grid img {
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  max-width: 100px;
+  max-height: 100px;
+}
