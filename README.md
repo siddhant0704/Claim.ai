@@ -1,6 +1,7 @@
 # Claim.ai
 
-Smart Document Understanding and Reasoning Engine for Healthcare Claims (Dev Url: https://claim-ai.onrender.com/)
+Smart Document Understanding and Reasoning Engine for Healthcare Claims 
+Dev URL: https://claim-ai.onrender.com/
 
 ---
 
