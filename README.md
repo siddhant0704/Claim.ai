@@ -54,7 +54,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 python app.py
 ```
 
-The app will be available at [http://127.0.0.1:8050](http://127.0.0.1:8050).
+The app will be available at [http://0.0.0.0:8050](http://0.0.0.0:8050).
 
 ---
 
