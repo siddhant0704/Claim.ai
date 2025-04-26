@@ -1,5 +1,6 @@
 from dash import Dash, html, dcc, Output, Input, State
 import dash_bootstrap_components as dbc
+import os
 
 # Dash app
 app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -47,4 +48,5 @@ def display_page(pathname, dashboard_data):
 
 # Run the app
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8050))
+    app.run(debug=True, host="0.0.0.0", port=port)
