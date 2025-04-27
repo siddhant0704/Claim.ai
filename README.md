@@ -1,4 +1,4 @@
-# Claim.ai
+# ClaimPal.ai
 
 Smart Document Understanding and Reasoning Engine for Healthcare Claims
 
@@ -8,7 +8,7 @@ Dev URL: https://claim-ai.onrender.com/
 
 ## Overview
 
-**Claim.ai** is an intelligent platform designed to streamline the intake, processing, and review of healthcare insurance claims. It leverages OCR, NLP, and AI to extract, classify, and summarize information from uploaded documents (PDFs, images, audio), providing insurance companies with structured, actionable data for rapid claim assessment.
+**ClaimPal.ai** is an intelligent platform designed to streamline the intake, processing, and review of healthcare insurance claims. It leverages OCR, NLP, and AI to extract, classify, and summarize information from uploaded documents (PDFs, images, audio), providing insurance companies with structured, actionable data for rapid claim assessment.
 
 ---
 
