@@ -2,11 +2,13 @@
 
 Smart Document Understanding and Reasoning Engine for Healthcare Claims
 
+Dev URL: https://claim-ai.onrender.com/
+
 ---
 
 ## Overview
 
-**Claim.ai** is an intelligent platform designed to streamline the intake, processing, and review of healthcare insurance claims. It leverages OCR, NLP, and AI (OpenAI GPT) to extract, classify, and summarize information from uploaded documents (PDFs, images, audio), providing insurance companies with structured, actionable data for rapid claim assessment.
+**Claim.ai** is an intelligent platform designed to streamline the intake, processing, and review of healthcare insurance claims. It leverages OCR, NLP, and AI to extract, classify, and summarize information from uploaded documents (PDFs, images, audio), providing insurance companies with structured, actionable data for rapid claim assessment.
 
 ---
 
@@ -14,7 +16,7 @@ Smart Document Understanding and Reasoning Engine for Healthcare Claims
 
 - 📄 **Multi-format Upload:** Supports PDFs, images (JPG, PNG), and audio files.
 - 🏷️ **Automatic Document Classification:** Detects document type (e.g., Medical Record, Prescription, Lab Report).
-- 🧠 **AI-Powered Extraction:** Uses GPT to extract and summarize key patient and claim information.
+- 🧠 **AI-Powered Extraction:** Uses NLU, NER, and LLM to extract and summarize key patient and claim information.
 - ❌ **Missing Document Detection:** Identifies missing or incomplete information for each claim.
 - 📊 **Dashboard:** Visualizes all patient claims, statuses, and summaries in a clean, interactive table.
 - 👤 **Patient Profile:** Detailed, structured view of each patient’s claim, uploaded docs, and extracted info.
@@ -52,7 +54,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 python app.py
 ```
 
-The app will be available at [http://127.0.0.1:8050](http://127.0.0.1:8050).
+The app will be available at [http://0.0.0.0:8050](http://0.0.0.0:8050).
 
 ---
 
