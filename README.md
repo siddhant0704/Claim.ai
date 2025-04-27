@@ -16,7 +16,7 @@ Dev URL: https://claim-ai.onrender.com/
 
 - 📄 **Multi-format Upload:** Supports PDFs, images (JPG, PNG), and audio files.
 - 🏷️ **Automatic Document Classification:** Detects document type (e.g., Medical Record, Prescription, Lab Report).
-- 🧠 **AI-Powered Extraction:** Uses GPT to extract and summarize key patient and claim information.
+- 🧠 **AI-Powered Extraction:** Uses NLU, NER, and LLM to extract and summarize key patient and claim information.
 - ❌ **Missing Document Detection:** Identifies missing or incomplete information for each claim.
 - 📊 **Dashboard:** Visualizes all patient claims, statuses, and summaries in a clean, interactive table.
 - 👤 **Patient Profile:** Detailed, structured view of each patient’s claim, uploaded docs, and extracted info.
