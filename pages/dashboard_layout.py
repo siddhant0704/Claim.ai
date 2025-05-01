@@ -2,7 +2,6 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc
 
 landing_page_layout = dbc.Container([
-    # Header section
     dbc.Row([
         dbc.Col([
             html.H2("📋 Welcome to ClaimPal Dashboard!", className="fw-bold mb-2"),

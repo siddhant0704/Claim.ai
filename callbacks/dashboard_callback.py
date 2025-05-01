@@ -44,7 +44,6 @@ def populate_table(dashboard_data):
 def navigate_to_upload(add_patient_clicks):
     triggered_id = ctx.triggered_id
 
-    # If "Add Patient" button is clicked, navigate to the upload page
     if triggered_id == "add-patient-btn" and add_patient_clicks:
         return "/upload"
 

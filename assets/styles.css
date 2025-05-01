@@ -84,7 +84,7 @@ body {
   text-align: center;
   line-height: 160px;
   margin-bottom: 2rem;
-  font-weight: 500;
+  font-weight: 400;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   cursor: pointer;
