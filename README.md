@@ -42,10 +42,10 @@ pip install -r requirements.txt
 
 ### 3. Set Up Environment Variables
 
-Create a `.env` file in the root directory and add your OpenAI API key:
+Create a `.env` file in the root directory and add your anthropic API key:
 
 ```
-OPENAI_API_KEY=your_openai_api_key_here
+anthropic_API_KEY=your_anthropic_api_key_here
 ```
 
 ### 4. Run the App
@@ -89,7 +89,7 @@ Claim.ai/
 ## Requirements
 
 - Python 3.8+
-- [OpenAI API Key](https://platform.openai.com/)
+- [anthropic API Key](https://platform.anthropic.com/)
 - Tesseract OCR (for image extraction)
 - [Git LFS](https://git-lfs.github.com/) (if using large files)
 
@@ -112,7 +112,7 @@ MIT License
 ## Acknowledgements
 
 - [Dash by Plotly](https://dash.plotly.com/)
-- [OpenAI GPT](https://platform.openai.com/)
+- [anthropic GPT](https://platform.anthropic.com/)
 - [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
 - [pdfminer.six](https://github.com/pdfminer/pdfminer.six)
 

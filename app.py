@@ -6,7 +6,6 @@ import os
 app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = "Claims Intake Platform"
 
-# Import layouts
 from pages.dashboard_layout import landing_page_layout
 from pages.upload_docs_layout import upload_docs_page_layout
 from pages.patient_profile_layout import patient_profile_layout  # Import the new layout
