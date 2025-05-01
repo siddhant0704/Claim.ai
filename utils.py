@@ -3,17 +3,29 @@ from dotenv import load_dotenv
 import pytesseract
 from PIL import Image
 from pdfminer.high_level import extract_text
-from openai import OpenAI
 from dash import html
+from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Get the API key from environment
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("ANTHROPIC_API_KEY")
 
-# Set up the OpenAI client
-client = OpenAI(api_key=api_key)
+# Set up the Anthropic client
+anthropic_client = Anthropic(api_key=api_key)
+
+# --- Claude Utility ---
+def claude_call(prompt, model="claude-3-opus-20240229", temperature=0):
+    # Claude expects prompts in a special format
+    full_prompt = f"{HUMAN_PROMPT} {prompt}{AI_PROMPT}"
+    response = anthropic_client.completions.create(
+        prompt=full_prompt,
+        model=model,
+        max_tokens_to_sample=1024,
+        temperature=temperature,
+    )
+    return response.completion.strip()
 
 # --- Text Extraction ---
 def extract_text_from_pdf(file_path):
@@ -24,18 +36,8 @@ def extract_text_from_image(image_path):
     return pytesseract.image_to_string(img)
 
 def transcribe_audio(audio_path):
-    with open(audio_path, "rb") as f:
-        transcript = client.audio.transcriptions.create(model="whisper-1", file=f)
-    return transcript.text
-
-# --- GPT Utility ---
-def gpt_call(prompt, model="gpt-3.5-turbo", temperature=0):
-    response = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature
-    )
-    return response.choices[0].message.content
+    # Claude does not support audio transcription; implement with another service if needed
+    return "Audio transcription not implemented for Claude-only mode."
 
 # --- Document Classification + Info Extraction ---
 def classify_and_extract(text):
@@ -55,7 +57,7 @@ Document:
 {text}
 \"\"\"
     """
-    return gpt_call(prompt)
+    return claude_call(prompt)
 
 # --- Generate Claim Summary ---
 def generate_claim_summary(combined_info, missing_docs):
@@ -85,7 +87,7 @@ Structure response like this:
 "Reasoning": "...",
 
     """
-    return gpt_call(prompt)
+    return claude_call(prompt)
 
 # --- Suggest Missing Documents ---
 def suggest_missing_documents(combined_info):
@@ -106,7 +108,7 @@ List down what key documents or information are missing that could help strength
 
 Only list relevant missing items.
     """
-    return gpt_call(prompt)
+    return claude_call(prompt)
 
 # --- 🧠 Final Pipeline ---
 def process_claim_case(documents):
@@ -152,7 +154,7 @@ Information:
 {combined_info}
 \"\"\"
 """
-    return gpt_call(prompt)
+    return claude_call(prompt)
 
 def format_combined_info(combined_info):
     """
