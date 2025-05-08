@@ -90,10 +90,9 @@ def display_page(pathname, dashboard_data):
     elif pathname.startswith("/profile"):
         return patient_profile_layout
     elif pathname == "/":
-        populate_table(dashboard_data)
         return landing_page_layout
     return landing_page_layout
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8050))
-    app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(debug=True, host="0.0.0.0", port=port)
