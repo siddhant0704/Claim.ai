@@ -47,15 +47,11 @@ First, determine if the document below is relevant to healthcare or health insur
 If the document is NOT related to healthcare or insurance claims (for example, resumes, CVs, personal letters, legal contracts, etc.), respond with:
 "Unrelated Document: This document is not relevant to healthcare or insurance claims."
 
-If the document IS relevant, classify it into one of:
-- Medical Record
-- Insurance Claim
-- Prescription
-- Lab Report
-- Hospital Bill
-- Other Healthcare Document
+If the document IS relevant, do the following:
+1. Classify it into one of these categories and output as the first line:
+Category: Medical Record / Insurance Claim / Prescription / Lab Report / Hospital Bill / Other Healthcare Document
 
-Then, extract key information relevant to healthcare claims (such as patient name, age, gender, diagnosis, treatment, hospital, doctor, dates, claim amount, etc.).
+2. Then, extract key information relevant to healthcare claims (such as patient name, age, gender, diagnosis, treatment, hospital, doctor, dates, claim amount, etc.).
 
 Document:
 \"\"\"
