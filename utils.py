@@ -40,15 +40,22 @@ def gpt_call(prompt, model="gpt-3.5-turbo", temperature=0):
 # --- Document Classification + Info Extraction ---
 def classify_and_extract(text):
     prompt = f"""
-You are an expert assistant. First, classify the document into one of the following categories:
+You are an expert assistant for healthcare insurance claims.
+
+First, determine if the document below is relevant to healthcare or health insurance claims (e.g., medical records, prescriptions, lab reports, hospital bills, insurance forms).
+
+If the document is NOT related to healthcare or insurance claims (for example, resumes, CVs, personal letters, legal contracts, etc.), respond with:
+"Unrelated Document: This document is not relevant to healthcare or insurance claims."
+
+If the document IS relevant, classify it into one of:
 - Medical Record
 - Insurance Claim
-- Personal Document
 - Prescription
 - Lab Report
-- Other
+- Hospital Bill
+- Other Healthcare Document
 
-Then, extract key information from each document.
+Then, extract key information relevant to healthcare claims (such as patient name, age, gender, diagnosis, treatment, hospital, doctor, dates, claim amount, etc.).
 
 Document:
 \"\"\"
