@@ -327,3 +327,11 @@ body {
   overflow: hidden; /* Ensures child elements respect the border radius */
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
+
+.landing-page-container {
+  background: linear-gradient(120deg, #f8fafc 0%, #e3f0ff 100%);
+  min-height: 100vh;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  padding-bottom: 3rem;
+}

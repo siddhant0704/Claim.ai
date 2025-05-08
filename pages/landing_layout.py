@@ -7,21 +7,32 @@ landing_layout = dbc.Container(
             dbc.Col(
                 [
                     html.Div([
-                        html.Img(
-                            src="https://img.icons8.com/ios-filled/100/4a90e2/medical-doctor.png",
-                            style={"height": "70px", "marginBottom": "1.5rem"},
-                            className="mx-auto d-block"
-                        ),
-                        html.H1(
-                            "ClaimPal.ai",
-                            className="display-3 fw-bold text-center mb-2",
-                            style={"color": "#1a3c60", "letterSpacing": "1px"}
-                        ),
-                        html.P(
-                            "AI-powered insurance claims for healthcare — built for speed, accuracy, and resilience in disaster zones.",
-                            className="lead text-center mb-4",
-                            style={"fontSize": "1.25rem", "color": "#495057"}
-                        ),
+                        # Modern text-based logo with gradient
+                        html.Div([
+                            html.H1(
+                                [
+                                    html.Span("Claim", style={
+                                        "fontWeight": "700",
+                                        "color": "#1a3c60",
+                                        "fontFamily": "'Inter', sans-serif"
+                                    }),
+                                    html.Span("Pal", style={
+                                        "fontWeight": "700",
+                                        "background": "linear-gradient(90deg, #007bff 0%, #00c6ff 100%)",
+                                        "WebkitBackgroundClip": "text",
+                                        "WebkitTextFillColor": "transparent",
+                                        "fontFamily": "'Inter', sans-serif"
+                                    }),
+                                ],
+                                className="display-3 fw-bold text-center mb-2",
+                                style={"letterSpacing": "1px", "marginTop": "2.5rem"}
+                            ),
+                            html.P(
+                                "AI-driven insurance claims for disaster zones — accelerating patient care, reducing paperwork, and saving lives.",
+                                className="lead text-center mb-4",
+                                style={"fontSize": "1.2rem", "color": "#495057", "fontWeight": "500"}
+                            ),
+                        ]),
                         dbc.Row([
                             dbc.Col(
                                 dbc.Card(
@@ -56,10 +67,21 @@ landing_layout = dbc.Container(
                         ], className="mb-4 mt-2 g-3"),
                         html.Div(
                             html.A(
-                                "Login with Google",
+                                [
+                                    html.Img(
+                                        src="https://img.icons8.com/color/24/000000/google-logo.png",
+                                        style={"marginRight": "8px", "marginBottom": "3px"}
+                                    ),
+                                    "Login with Google"
+                                ],
                                 href="/login",
-                                className="btn btn-primary btn-lg px-5 py-3 shadow d-block mx-auto",
-                                style={"fontWeight": "600", "fontSize": "1.15rem", "letterSpacing": "0.5px"}
+                                className="btn btn-outline-primary btn-md px-4 py-2 shadow-sm d-inline-flex align-items-center",
+                                style={
+                                    "fontWeight": "500",
+                                    "fontSize": "1rem",
+                                    "letterSpacing": "0.5px",
+                                    "marginTop": "1.5rem"
+                                }
                             ),
                             className="text-center"
                         ),
