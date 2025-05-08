@@ -24,6 +24,7 @@ app.title = "Claims Intake Platform"
 from pages.dashboard_layout import landing_page_layout
 from pages.upload_docs_layout import upload_docs_page_layout
 from pages.patient_profile_layout import patient_profile_layout
+from pages.landing_layout import landing_layout
 
 # Import callbacks
 from callbacks.dashboard_callback import *
@@ -38,7 +39,8 @@ app.layout = html.Div([
     html.Div([
         landing_page_layout,
         upload_docs_page_layout,
-        patient_profile_layout
+        patient_profile_layout,
+        landing_layout,  # Add this
     ], style={"display": "none"})
 ])
 
@@ -67,8 +69,9 @@ def logout():
 
 @server.before_request
 def require_login():
-    # Allow login, callback, static, and favicon without auth
-    if request.path.startswith("/login") or request.path.startswith("/static") or request.path.startswith("/_dash") or request.path == "/favicon.ico":
+    # Allow landing page ("/"), login, callback, static, and favicon without auth
+    if request.path in ["/", "/login", "/login/callback", "/favicon.ico"] or \
+       request.path.startswith("/static") or request.path.startswith("/_dash"):
         return
     if "oauth_token" not in session:
         return redirect("/login")
@@ -80,6 +83,8 @@ def require_login():
     State("dashboard-data", "data")
 )
 def display_page(pathname, dashboard_data):
+    if "oauth_token" not in session:
+        return landing_layout
     if pathname == "/upload":
         return upload_docs_page_layout
     elif pathname.startswith("/profile"):
