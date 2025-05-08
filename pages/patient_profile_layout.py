@@ -73,4 +73,16 @@ patient_profile_layout = dbc.Container([
         is_open=False,
         centered=True,
     ),
+    dbc.Modal(
+    [
+        dbc.ModalHeader("Clarification Request Template"),
+        dbc.ModalBody(html.Pre(id="clarification-message", style={"whiteSpace": "pre-wrap"})),
+        dbc.ModalFooter(
+            dbc.Button("Close", id="close-clarification-modal", className="ms-auto")
+        ),
+    ],
+    id="clarification-modal",
+    is_open=False,
+    centered=True,
+),
 ], fluid=True, className="patient-profile-container")

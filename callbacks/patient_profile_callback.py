@@ -116,3 +116,20 @@ def update_claim_status(submit_clicks, reach_out_clicks, search, dashboard_data)
         return dashboard_data
 
     return dash.no_update
+
+from utils import generate_clarification_message
+
+@callback(
+    Output("clarification-modal", "is_open"),
+    Output("clarification-message", "children"),
+    Input("reach-out-btn", "n_clicks"),
+    State("patient-name", "children"),
+    State("missing-docs", "children"),
+    State("clarification-modal", "is_open"),
+    prevent_initial_call=True,
+)
+def show_clarification_modal(n_clicks, patient_name, missing_docs, is_open):
+    if n_clicks:
+        message = generate_clarification_message(patient_name, missing_docs)
+        return True, message
+    return is_open, dash.no_update

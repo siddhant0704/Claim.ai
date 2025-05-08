@@ -181,3 +181,14 @@ def format_combined_info(combined_info):
             # If not a key-value, just show the line
             items.append(html.Tr([html.Td(line, colSpan=2)]))
     return html.Table(items, className="table table-sm table-borderless")
+
+def generate_clarification_message(patient_name, missing_docs):
+    prompt = f"""
+You are an assistant for healthcare claims. Write a polite, professional message to the patient named '{patient_name}', requesting the following missing or unclear documents/information needed to process their insurance claim:
+
+Missing/unclear items:
+{missing_docs}
+
+The message should be clear, concise, and ready to send.
+"""
+    return gpt_call(prompt)
