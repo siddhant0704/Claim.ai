@@ -53,7 +53,10 @@ def upload_callback(contents, submit_clicks, reset_clicks, back_clicks, filename
             for file in stored_data:
                 parsed_data = file.get("parsed_data", {})
                 combined_info = parsed_data.get("combined_info", "")
-                match = re.search(r"(?:Patient Name|Name)\s*:\s*([A-Za-z\s]+)", combined_info, re.IGNORECASE)
+                match = re.search(r"Patient Name\s*:\s*([^\n\r]+)", combined_info, re.IGNORECASE)
+                if not match:
+                    # fallback: try just "Name:" but not "Doctor's Name:"
+                    match = re.search(r"^Name\s*:\s*([^\n\r]+)", combined_info, re.IGNORECASE | re.MULTILINE)
                 if match:
                     patient_name = match.group(1).strip()
                     summary = parsed_data.get("patient_summary", "")
