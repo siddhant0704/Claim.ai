@@ -1,4 +1,7 @@
 import dash
+import os
+import smtplib
+from email.mime.text import MIMEText
 from dash import Input, Output, State, callback, html
 from urllib.parse import parse_qs
 from utils import format_combined_info
@@ -133,3 +136,30 @@ def show_clarification_modal(n_clicks, patient_name, missing_docs, is_open):
         message = generate_clarification_message(patient_name, missing_docs)
         return True, message
     return is_open, dash.no_update
+
+@callback(
+    Output("clarification-message", "children", allow_duplicate=True),
+    Input("send-clarification-email-btn", "n_clicks"),
+    State("clarification-email", "value"),
+    State("clarification-message", "children"),
+    prevent_initial_call=True,
+)
+def send_clarification_email(n_clicks, recipient_email, message):
+    if n_clicks and recipient_email and message:
+        # --- Simple SMTP Example (for demo only, not production) ---
+        # For production, use Gmail API with OAuth2 for security!
+        try:
+            sender_email = os.getenv("GMAIL_SENDER_EMAIL")
+            sender_password = os.getenv("GMAIL_APP_PASSWORD")
+            msg = MIMEText(message)
+            msg["Subject"] = "Clarification Needed for Insurance Claim"
+            msg["From"] = sender_email
+            msg["To"] = recipient_email
+
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+                server.login(sender_email, sender_password)
+                server.sendmail(sender_email, recipient_email, msg.as_string())
+            return message + "\n\n✅ Email sent successfully!"
+        except Exception as e:
+            return message + f"\n\n❌ Failed to send email: {e}"
+    return message

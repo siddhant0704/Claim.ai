@@ -74,15 +74,22 @@ patient_profile_layout = dbc.Container([
         centered=True,
     ),
     dbc.Modal(
-    [
-        dbc.ModalHeader("Clarification Request Template"),
-        dbc.ModalBody(html.Pre(id="clarification-message", style={"whiteSpace": "pre-wrap"})),
-        dbc.ModalFooter(
-            dbc.Button("Close", id="close-clarification-modal", className="ms-auto")
-        ),
-    ],
-    id="clarification-modal",
-    is_open=False,
-    centered=True,
-),
+        [
+            dbc.ModalHeader("Clarification Request Template"),
+            dbc.ModalBody([
+                html.Div([
+                    dbc.Label("Recipient Email", html_for="clarification-email"),
+                    dbc.Input(type="email", id="clarification-email", placeholder="Enter recipient email", className="mb-2"),
+                ]),
+                html.Pre(id="clarification-message", style={"whiteSpace": "pre-wrap"}),
+            ]),
+            dbc.ModalFooter([
+                dbc.Button("Send Email", id="send-clarification-email-btn", color="primary", className="me-2"),
+                dbc.Button("Close", id="close-clarification-modal", className="ms-auto")
+            ]),
+        ],
+        id="clarification-modal",
+        is_open=False,
+        centered=True,
+    ),
 ], fluid=True, className="patient-profile-container")
