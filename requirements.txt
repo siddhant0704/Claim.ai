@@ -9,3 +9,6 @@ openai
 python-dotenv
 flask-dance 
 flask-sqlalchemy
+requests-oauthlib
+
+
