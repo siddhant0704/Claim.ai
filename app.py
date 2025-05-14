@@ -11,7 +11,8 @@ CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 AUTHORIZATION_BASE_URL = "https://accounts.google.com/o/oauth2/auth"
 TOKEN_URL = "https://accounts.google.com/o/oauth2/token"
-REDIRECT_URI = "https://claim-ai.onrender.com/login/callback"
+REDIRECT_URI = "http://localhost:8050/login/callback"
+# REDIRECT_URI = "https://claim-ai.onrender.com/login/callback"
 SCOPE = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
 
 server = Flask(__name__)
