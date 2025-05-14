@@ -2,73 +2,119 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc
 
 upload_docs_page_layout = dbc.Container([
-    # Header section
+    # Back Button (top left)
+    dbc.Row([
+        dbc.Col(
+            dbc.Button(
+                "Back to Dashboard",
+                id="upload-back-btn",
+                color="secondary",
+                className="mb-4",
+                href="/",
+                style={"fontWeight": "500"}
+            ),
+            width="auto"
+        )
+    ], className="mb-2"),
+
+    # Header Section
     dbc.Row([
         dbc.Col([
-            html.H2("📝 Insurance Claim Processor", className="fw-bold mb-2"),
+            html.H2("Upload Documents", className="fw-bold mb-1", style={"letterSpacing": "1px", "color": "#1a3c60"}),
             html.P(
-                "Upload your claim documents and extract insights instantly. Supported formats include PDFs, images, and audio files.",
-                className="text-muted"
-            )
+                "Upload patient documents for claim processing. Supported formats: PDF, JPG, PNG.",
+                className="text-muted",
+                style={"fontSize": "1.1rem", "marginBottom": "0"}
+            ),
         ], md=8),
     ], className="align-items-center mb-4"),
 
-    dcc.Upload(
-        id='upload-docs',
-        children=html.Div([
-            "📂 Drag and drop or ",
-            html.A("select files", className="upload-link")
-        ]),
-        className="upload-box",
-        multiple=True,
-        accept=".pdf,.png,.jpg,.jpeg,.mp3,.wav,.m4a"
-    ),
-
+    # Upload Section (Card 1) with Action Buttons
     dbc.Row([
-        dbc.Col(dbc.Button([
-            "Process Claim"
-        ], id="upload-submit-btn", color="primary", className="action-btn btn-sm"), md=2),  # Updated ID
+        dbc.Col(
+            dbc.Card([
+                dbc.CardBody([
+                    html.H5("Upload Files", className="fw-bold mb-3", style={"color": "#1a3c60"}),
+                    dcc.Upload(
+                        id="upload-docs",
+                        children=html.Div([
+                            "Drag and drop files here, or ",
+                            html.A("browse", style={"color": "#007bff", "textDecoration": "underline"})
+                        ]),
+                        style={
+                            "width": "100%",
+                            "height": "180px",
+                            "lineHeight": "180px",
+                            "borderWidth": "2px",
+                            "borderStyle": "dashed",
+                            "borderRadius": "10px",
+                            "textAlign": "center",
+                            "backgroundColor": "#f8f9fa",
+                            "color": "#6c757d",
+                        },
+                        multiple=True
+                    ),
+                    html.Div(id="file-preview", className="mt-3", style={"fontSize": "0.9rem", "color": "#495057"}),
+                    html.Div(
+                        [
+                            dbc.Button("Submit", id="upload-submit-btn", color="primary", className="me-2", n_clicks=0, style={"minWidth": "120px", "fontWeight": "600"}),
+                            dbc.Button("Reset", id="upload-reset-btn", color="secondary", n_clicks=0, style={"minWidth": "120px", "fontWeight": "600"}),
+                        ],
+                        id="action-buttons",
+                        className="d-flex justify-content-center gap-3 mt-4"
+                    ),
+                ])
+            ], className="shadow-sm mb-4"),
+            md=12, className="mx-auto"
+        )
+    ]),
 
-        dbc.Col(dbc.Button([
-            "Start Over"
-        ], id="upload-reset-btn", color="danger", className="action-btn btn-sm"), md=2),  # Updated ID
-    ], justify="center", id="action-buttons", className="hidden"),
-
-    html.Div(id="file-preview", className="mb-4"),
-
-    dcc.Loading(
-        id="loading-output",
-        type="circle",
-        children=[
-            dbc.Row([
-                dbc.Col(dbc.Card([
-                    dbc.CardHeader("📋 Combined Info", className="card-header"),
-                    dbc.CardBody(
-                        dcc.Textarea(id="output-info", className="output-textarea")
-                    )
-                ]), md=4, className="mb-4"),
-
-                dbc.Col(dbc.Card([
-                    dbc.CardHeader("📑 Summary", className="card-header"),
-                    dbc.CardBody(
-                        dcc.Textarea(id="output-summary", className="output-textarea")
-                    )
-                ]), md=4, className="mb-4"),
-
-                dbc.Col(dbc.Card([
-                    dbc.CardHeader("❌ Missing Documents", className="card-header"),
-                    dbc.CardBody(
-                        dcc.Textarea(id="output-missing", className="output-textarea")
-                    )
-                ]), md=4, className="mb-4"),
-            ])
-        ]
-    ),
+    # Output Section (Card 2)
+    dbc.Row([
+        dbc.Col(
+            dbc.Card([
+                dbc.CardBody([
+                    html.H5("Processing Results", className="fw-bold mb-3", style={"color": "#1a3c60"}),
+                    dcc.Loading(
+                        id="loading-output",
+                        type="circle",
+                        children=[
+                            dbc.Row([
+                                dbc.Col([
+                                    html.P("Patient Info:", className="fw-bold mb-1", style={"color": "#495057"}),
+                                    dcc.Textarea(
+                                        id="output-info",
+                                        className="form-control mb-3",
+                                        style={"height": "180px", "resize": "none"},
+                                        readOnly=True
+                                    ),
+                                ], md=4),
+                                dbc.Col([
+                                    html.P("Summary:", className="fw-bold mb-1", style={"color": "#495057"}),
+                                    dcc.Textarea(
+                                        id="output-summary",
+                                        className="form-control mb-3",
+                                        style={"height": "180px", "resize": "none"},
+                                        readOnly=True
+                                    ),
+                                ], md=4),
+                                dbc.Col([
+                                    html.P("Missing Documents:", className="fw-bold mb-1", style={"color": "#495057"}),
+                                    dcc.Textarea(
+                                        id="output-missing",
+                                        className="form-control",
+                                        style={"height": "180px", "resize": "none"},
+                                        readOnly=True
+                                    ),
+                                ], md=4),
+                            ], className="g-3"),
+                        ]
+                    ),
+                ]),
+            ], className="shadow-sm"),
+            md=12, className="mx-auto"
+        )
+    ]),
 
     dcc.Store(id="stored-docs", data=[]),
-
-    dbc.Row([
-        dbc.Col(dbc.Button("Upload to Dashboard", id="upload-back-btn", color="secondary", className="action-btn back-btn", href="/")),  # Updated ID
-    ], justify="center"),
-
-], fluid=True, className="upload-page-container")
+], fluid=True, className="upload-container")
