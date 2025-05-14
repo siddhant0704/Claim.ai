@@ -4,7 +4,7 @@ from flask import Flask, redirect, url_for, session, request
 from dash import Dash, html, dcc, Output, Input, State
 import dash_bootstrap_components as dbc
 from requests_oauthlib import OAuth2Session
-from dotenv import load_dotenvx
+from dotenv import load_dotenv
 load_dotenv()
 
 CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
