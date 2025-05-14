@@ -6,7 +6,6 @@ from pdfminer.high_level import extract_text
 from openai import OpenAI
 from dash import html
 import pytesseract
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 # Load environment variables from .env file
 load_dotenv()
